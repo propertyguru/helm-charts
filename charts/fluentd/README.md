@@ -1,5 +1,7 @@
 # Fluentd Helm Chart
 
+This chart is using Fluentd [0.2.7](https://github.com/fluent/helm-charts/tree/fluentd-0.2.7)
+
 [Fluentd](https://www.fluentd.org/) is an open source data collector for unified logging layer. Fluentd allows you to unify data collection and consumption for a better use and understanding of data.
 
 ## Installation
@@ -177,4 +179,4 @@ env:
 
 ## License
 
-Please refer to original license https://github.com/fluent/helm-charts/blob/main/LICENSE
+Please refer to original license <https://github.com/fluent/helm-charts/blob/main/LICENSE>
