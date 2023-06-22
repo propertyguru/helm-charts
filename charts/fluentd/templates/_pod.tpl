@@ -52,13 +52,13 @@ containers:
     volumeMounts:
       {{- toYaml .Values.volumeMounts | nindent 6 }}
       {{- range $key := .Values.configMapConfigs }}
-      {{- print "- name: fluentd-custom-cm-" $key  | nindent 6 }}
+      {{- print "- name: " $key  | nindent 6 }}
         {{- print "mountPath: /etc/fluent/" $key ".d"  | nindent 8 }}
       {{- end }}
 volumes:
   {{- toYaml .Values.volumes | nindent 2 }}
   {{- range $key := .Values.configMapConfigs }}
-  {{- print "- name: fluentd-custom-cm-" $key  | nindent 2 }}
+  {{- print "- name: " $key  | nindent 2 }}
     configMap:
       {{- print "name: " .  | nindent 6 }}
       defaultMode: 0777
