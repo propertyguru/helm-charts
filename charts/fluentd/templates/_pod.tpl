@@ -43,10 +43,6 @@ containers:
       containerPort: {{ $port.containerPort }}
       protocol: {{ $port.protocol }}
     {{- end }}
-    livenessProbe:
-      {{- toYaml .Values.livenessProbe | nindent 6 }}
-    readinessProbe:
-      {{- toYaml .Values.readinessProbe | nindent 6 }}
     resources:
       {{- toYaml .Values.resources | nindent 8 }}
     volumeMounts:
