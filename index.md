@@ -12,4 +12,6 @@ helm search repo pg-helm-charts
 ```
 
 ## Install Chart
+```sh
 helm install <release-name> <chart-name> -f <path-to-values.yaml> -n <namespace>
+```
