@@ -1,0 +1,34 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ include "pg-deploy.name" . }}
+spec:
+  gateways:
+  - istio-system/istio-internal-gateway
+  - istio-system/istio-eastwest-gateway
+  - mesh
+  hosts:
+  - "{{ include "pg-deploy.name" . }}.{{ .Values.env }}.svc"
+  - "{{ include "pg-deploy.name" . }}.{{ .Values.component }}-{{ .Values.env }}.svc"
+  {{- if eq .Values.env "integration" }}
+  - "{{ include "pg-deploy.name" . }}.{{ .Values.component }}-test"
+  - "{{ include "pg-deploy.name" . }}.{{ .Values.component }}-test.svc"
+  - "{{ include "pg-deploy.name" . }}-svc.{{ .Values.component }}-test"
+  - "{{ include "pg-deploy.name" . }}-svc.{{ .Values.component }}-test.svc"
+  {{- else if eq .Values.env "production" }}
+  - "{{ include "pg-deploy.name" . }}.{{ .Values.component }}-prod"
+  - "{{ include "pg-deploy.name" . }}.{{ .Values.component }}-prod.svc"
+  - "{{ include "pg-deploy.name" . }}-svc.{{ .Values.component }}-prod"
+  - "{{ include "pg-deploy.name" . }}-svc.{{ .Values.component }}-prod.svc"
+  {{- else if eq .Values.env "staging" }}
+  - "{{ include "pg-deploy.name" . }}.{{ .Values.component }}-stage"
+  - "{{ include "pg-deploy.name" . }}.{{ .Values.component }}-stage.svc"
+  - "{{ include "pg-deploy.name" . }}-svc.{{ .Values.component }}-stage"
+  - "{{ include "pg-deploy.name" . }}-svc.{{ .Values.component }}-stage.svc"
+  {{- end }}
+  http:
+  - route:
+    - destination:
+        host: {{ include "pg-deploy.name" . }}.{{ .Values.component }}-{{ .Values.env }}.svc.cluster.local
+        port:
+          number: 8080

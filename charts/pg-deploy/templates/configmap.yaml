@@ -1,0 +1,8 @@
+{{- if .Values.deployment.configMap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "pg-deploy.name" . }}
+data:
+  {{ .Values.deployment.configMap.data | nindent 2 }}
+{{- end }}

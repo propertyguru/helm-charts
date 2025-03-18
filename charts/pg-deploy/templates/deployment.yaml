@@ -1,0 +1,139 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pg-deploy.name" . }}
+  labels:
+    {{- include "pg-deploy.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  {{- if not .Values.deployment.autoscaling.enabled }}
+  replicas: {{ .Values.deployment.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "pg-deploy.selectorLabels" . | nindent 6 }}
+  revisionHistoryLimit: {{ .Values.deployment.strategy.revisionHistoryLimit }}
+  progressDeadlineSeconds: {{ .Values.deployment.strategy.progressDeadlineSeconds }}
+  strategy:
+    type: {{ .Values.deployment.strategy.type }}
+    {{- if eq .Values.deployment.strategy.type "RollingUpdate" }}
+    rollingUpdate:
+      maxSurge: {{ .Values.deployment.strategy.maxSurge }}
+      maxUnavailable: {{ .Values.deployment.strategy.maxUnavailable }}
+    {{- end }}
+  template:
+    metadata:
+      annotations:
+        ad.datadoghq.com/tags: |
+          '{"app": "{{ include "pg-deploy.name" . }}",
+          "component":"{{ .Values.component }}",
+          "environment":"{{ .Values.env }}",
+          "git.commit.sha":"{{ .Values.version }}",
+          "git.repository_url": "{{ .Values.gitRepository }}", 
+          "team": "{{ .Values.team }}",
+          "businessunit": "{{ .Values.businessunit }}",
+          }'
+      labels:
+        tags.datadoghq.com/env: {{ .Values.env }}
+        tags.datadoghq.com/service: {{ .Values.name }}
+        tags.datadoghq.com/version: "{{ .Values.version | trunc 7 }}"
+        version: "{{ .Values.version | trunc 7 }}"  
+        {{- include "pg-deploy.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: app
+          {{- with .Values.deployment.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          {{- with .Values.deployment.capturePodFailures }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+          {{- if .Values.deployment.configMap }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "pg-deploy.name" . }}
+          {{- end }}
+          env:
+            - name: DD_TRACE_ENABLED
+              value: {{ .Values.deployment.datadogTracing.enabled | quote }}
+            - name: DD_AGENT_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: DD_TRACE_AGENT_PORT
+              value: "8126"
+            - name: DD_ENV
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/env']
+            - name: DD_SERVICE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/service']
+            - name: DD_VERSION
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/version']
+            {{- if .Values.deployment.awsSecrets }}
+            {{- range .Values.deployment.awsSecrets }}
+            - name: {{ .objectName }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "pg-deploy.name" $ }}
+                  key: {{ .key }}
+            {{- end }}
+            {{- end }}
+          ports:
+            - name: app-port
+              containerPort: {{ .Values.deployment.applicationPort }}
+              protocol: TCP
+          {{- with .Values.deployment.startupProbe }}
+          startupProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.deployment.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.deployment.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.deployment.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.deployment.awsSecrets }}
+            - name: secrets-store-inline
+              readOnly: true
+              mountPath: /mnt/secrets-store  
+          {{- end }}
+          {{- with .Values.deployment.volumeMounts }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}     
+      volumes:
+      {{- if .Values.deployment.awsSecrets }}
+      - name: secrets-store-inline
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: {{ include "pg-deploy.name" . }}
+      {{- end }}
+      {{- with .Values.deployment.volumes }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+      serviceAccountName: {{ include "pg-deploy.name" . }}
+      {{- with .Values.deployment.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 120

@@ -1,0 +1,107 @@
+---
+# -- The name of the deployment
+name: "" 
+# -- The environment to deploy the application (e.g., integration, sandbox$n, staging, production)
+env: "" 
+# -- The team responsible for the deployment
+team: "" 
+# -- The business unit associated with the deployment
+businessunit: "" 
+# -- version is the git sha associated with the commit being deployed
+version: "" 
+# -- gitRepository is the URL of the git repository associated with the application
+gitRepository: ""
+# -- component is the key to group applications together under a common namespace
+component: "" 
+
+deployment:
+  # -- replicaCount is the number of replicas for the deployment. Only required if autoscaling.enabled: false
+  replicaCount: 1 
+  image:
+    # -- repository of the Docker image to deploy
+    repository: "" 
+    # -- tag is the docker image tag
+    tag: "" 
+    # -- pullPolicy for the container Image (e.g., Always, IfNotPresent, Never)
+    pullPolicy: Always 
+  
+  # -- applicationPort is the port on which the application will run
+  applicationPort: 3000 
+  
+  strategy:
+    # -- type of Deployment strategy (e.g., RollingUpdate, Recreate)
+    type: RollingUpdate 
+    # -- revisionHistoryLimit is the number of old ReplicaSets to retain
+    revisionHistoryLimit: 5 
+    # -- progressDeadlineSeconds is the time in seconds for the deployment to progress
+    progressDeadlineSeconds: 600 
+    # -- maxSurge is the maximum number of pods that can be created over the desired number of pods
+    maxSurge: 50% 
+    # -- maxUnavailable is the maximum number of pods that can be unavailable during the update process
+    maxUnavailable: 25% 
+
+  resources:
+    limits:
+      # -- CPU limit for entire pod
+      cpu: 100m 
+      # -- Memory limit for entire pod
+      memory: 128Mi 
+    requests:
+      # -- CPU request for entire pod
+      cpu: 100m 
+      # -- Memory request for entire pod
+      memory: 128Mi 
+
+  # -- Liveness probe configuration. More details - https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-command
+  livenessProbe: {}
+  
+  # -- Readiness probe configuration. More details - https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-readiness-probes
+  readinessProbe: {}
+
+  # -- Startup probe configuration. More details - https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes
+  startupProbe: {}
+        
+  autoscaling:
+    # -- Enable or disable autoscaling
+    enabled: true 
+    # -- Minimum number of replicas
+    minReplicas: 1 
+    # -- Maximum number of replicas
+    maxReplicas: 10 
+    # -- Target CPU utilization percentage threshold to trigger autoscaling
+    targetCPUUtilizationPercentage: 80 
+    # -- Target memory utilization percentage threshold to trigger autoscaling 
+    # targetMemoryUtilizationPercentage: 80 
+
+  datadogTracing:
+    # -- Enable or disable Datadog tracing
+    enabled: false 
+  
+  # -- Key is the Key in the AWS secret and ObjectName is the environment variable name to set in the pod corresponding to the key
+  awsSecrets:
+    - key: "key" 
+      objectName: "objectName" 
+  
+  # -- ConfigMap data to be set as environment variables in the pod
+  configMap:
+    data: |
+      "key": "value"
+
+  # -- Additional volumes to be mounted in the pod. More details - https://kubernetes.io/docs/concepts/storage/volumes/
+  volumes: {}
+
+  # -- Volume mounts to attach to the pod.
+  volumeMounts: {}
+
+  # -- Pod security context. More details - https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  podSecurityContext: {} 
+
+  # -- Container security context. More details - https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  securityContext: {}
+
+  # Capture Pod Failures messages in a file for debugging - https://kubernetes.io/docs/tasks/debug/debug-application/determine-reason-pod-failure/#customizing-the-termination-message
+  capturePodFailures: {}
+
+service:
+  # -- Port at which service will be exposed
+  port: 8080 

@@ -1,0 +1,32 @@
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: {{ include "pg-deploy.name" . }}
+spec:
+  endpoints: []
+  exportTo:
+  - "*"
+  hosts:
+  - "{{ include "pg-deploy.name" . }}.{{ .Values.env }}.svc"
+  {{- if eq .Values.env "integration" }}
+  - "{{ include "pg-deploy.name" . }}.{{ .Values.component }}-test"
+  - "{{ include "pg-deploy.name" . }}.{{ .Values.component }}-test.svc"
+  - "{{ include "pg-deploy.name" . }}-svc.{{ .Values.component }}-test"
+  - "{{ include "pg-deploy.name" . }}-svc.{{ .Values.component }}-test.svc"
+  {{- else if eq .Values.env "production" }}
+  - "{{ include "pg-deploy.name" . }}.{{ .Values.component }}-prod"
+  - "{{ include "pg-deploy.name" . }}.{{ .Values.component }}-prod.svc"
+  - "{{ include "pg-deploy.name" . }}-svc.{{ .Values.component }}-prod"
+  - "{{ include "pg-deploy.name" . }}-svc.{{ .Values.component }}-prod.svc"
+  {{- else if eq .Values.env "staging" }}
+  - "{{ include "pg-deploy.name" . }}.{{ .Values.component }}-stage"
+  - "{{ include "pg-deploy.name" . }}.{{ .Values.component }}-stage.svc"
+  - "{{ include "pg-deploy.name" . }}-svc.{{ .Values.component }}-stage"
+  - "{{ include "pg-deploy.name" . }}-svc.{{ .Values.component }}-stage.svc"
+  {{- end }}
+  location: MESH_INTERNAL
+  ports:
+  - name: http
+    number: 80
+    protocol: HTTP
+  resolution: STATIC
