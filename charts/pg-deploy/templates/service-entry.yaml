@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
 metadata:
-  name: {{ .Values.name }}
+  name: {{ include "pg-deploy.name" . }}
 spec:
   endpoints: []
   exportTo:

@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: {{ .Values.name }}
+  name: {{ include "pg-deploy.name" . }}
 spec:
   gateways:
   - istio-system/istio-internal-gateway
@@ -28,6 +28,6 @@ spec:
   http:
   - route:
     - destination:
-        host: {{ .Values.name }}.{{ .Values.component }}-{{ .Values.env }}.svc.cluster.local
+        host: {{ include "pg-deploy.name" . }}.{{ .Values.namespace }}.svc.cluster.local
         port:
           number: 8080

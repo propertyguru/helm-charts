@@ -12,7 +12,9 @@ version: ""
 # -- gitRepository is the URL of the git repository associated with the application
 gitRepository: ""
 # -- component is the key to group applications together under a common namespace
-component: "" 
+component: ""
+# -- namespace is the key to group applications together under a common namespace
+namespace: "" 
 
 deployment:
   # -- replicaCount is the number of replicas for the deployment. Only required if autoscaling.enabled: false

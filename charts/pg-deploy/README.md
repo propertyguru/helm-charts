@@ -15,8 +15,8 @@ A Helm chart for PropertyGuru Kubernetes deployments.
 | deployment.autoscaling.maxReplicas | int | `10` | Maximum number of replicas |
 | deployment.autoscaling.minReplicas | int | `1` | Minimum number of replicas |
 | deployment.autoscaling.targetCPUUtilizationPercentage | int | `80` | Target CPU utilization percentage threshold to trigger autoscaling |
-| deployment.autoscaling.targetMemoryUtilizationPercentage | int | `80` | Target memory utilization percentage threshold to trigger autoscaling  |
 | deployment.awsSecrets | list | `[{"key":"key","objectName":"objectName"}]` | Key is the Key in the AWS secret and ObjectName is the environment variable name to set in the pod corresponding to the key |
+| deployment.capturePodFailures | object | `{}` |  |
 | deployment.configMap | object | `{"data":"\"key\": \"value\"\n"}` | ConfigMap data to be set as environment variables in the pod |
 | deployment.datadogTracing.enabled | bool | `false` | Enable or disable Datadog tracing |
 | deployment.image.pullPolicy | string | `"Always"` | pullPolicy for the container Image (e.g., Always, IfNotPresent, Never) |
@@ -39,9 +39,10 @@ A Helm chart for PropertyGuru Kubernetes deployments.
 | deployment.strategy.type | string | `"RollingUpdate"` | type of Deployment strategy (e.g., RollingUpdate, Recreate) |
 | deployment.volumeMounts | object | `{}` | Volume mounts to attach to the pod. |
 | deployment.volumes | object | `{}` | Additional volumes to be mounted in the pod. More details - https://kubernetes.io/docs/concepts/storage/volumes/ |
-| env | string | `""` | The environment to deploy the application (e.g., integration, staging, production) |
+| env | string | `""` | The environment to deploy the application (e.g., integration, sandbox$n, staging, production) |
 | gitRepository | string | `""` | gitRepository is the URL of the git repository associated with the application |
 | name | string | `""` | The name of the deployment |
+| namespace | string | `""` | namespace is the key to group applications together under a common namespace |
 | service.port | int | `8080` | Port at which service will be exposed |
 | team | string | `""` | The team responsible for the deployment |
 | version | string | `""` | version is the git sha associated with the commit being deployed |
