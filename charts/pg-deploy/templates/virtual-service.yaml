@@ -8,7 +8,7 @@ spec:
   - istio-system/istio-eastwest-gateway
   - mesh
   hosts:
-  - "{{ .Values.name }.{{ .Values.env }}.svc"
+  - "{{ .Values.name }}.{{ .Values.env }}.svc"
   {{- if eq .Values.env "integration" }}
   - "{{ .Values.name }}.{{ .Values.component }}-test"
   - "{{ .Values.name }}.{{ .Values.component }}-test.svc"
