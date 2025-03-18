@@ -3,5 +3,13 @@
 ## Add the PropertyGuru Helm repository
 
 ```sh
-helm repo add fluent https://propertyguru.github.io/helm-charts
+helm repo add pg-helm-charts https://propertyguru.github.io/helm-charts
 ```
+
+## List Charts available in repo
+```sh
+helm search repo pg-helm-charts
+```
+
+## Install Chart
+helm install <release-name> <chart-name> -f <path-to-values.yaml> -n <namespace>
