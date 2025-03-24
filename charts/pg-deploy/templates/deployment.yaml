@@ -91,15 +91,15 @@ spec:
             - name: app-port
               containerPort: {{ .Values.deployment.applicationPort }}
               protocol: TCP
-          {{- with .Values.deployment.startupProbe }}
+          {{- with .Values.deployment.healthCheck.startupProbe }}
           startupProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.deployment.livenessProbe }}
+          {{- with .Values.deployment.healthCheck.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.deployment.readinessProbe }}
+          {{- with .Values.deployment.healthCheck.readinessProbe }}
           readinessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}

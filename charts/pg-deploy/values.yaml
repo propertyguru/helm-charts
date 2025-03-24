@@ -54,14 +54,16 @@ deployment:
       # -- Memory request for entire pod
       memory: 128Mi 
 
-  # -- Liveness probe configuration. More details - https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-command
-  livenessProbe: {}
-  
-  # -- Readiness probe configuration. More details - https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-readiness-probes
-  readinessProbe: {}
+  # -- HealthCheck configuration for the application. Includes liveness, readiness, and startup probes
+  healthCheck:
+    # -- Liveness probe configuration. More details - https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-command
+    livenessProbe: {}
+    
+    # -- Readiness probe configuration. More details - https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-readiness-probes
+    readinessProbe: {}
 
-  # -- Startup probe configuration. More details - https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes
-  startupProbe: {}
+    # -- Startup probe configuration. More details - https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes
+    startupProbe: {}
         
   autoscaling:
     # -- Enable or disable autoscaling
