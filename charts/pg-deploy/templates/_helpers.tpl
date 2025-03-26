@@ -21,11 +21,13 @@ Common labels
 */}}
 {{- define "pg-deploy.labels" -}}
 {{ include "pg-deploy.selectorLabels" . }}
+{{- if .Values.businessunit }}
+businessunit: {{ .Values.businessunit }}
+{{- end }}
 {{- if not .Values.team }}
 {{- fail "The 'team' label is required in values.yaml" }}
 {{- end }}
 team: {{ .Values.team }}
-businessunit: {{ .Values.businessunit }}
 {{- end }}
 
 
