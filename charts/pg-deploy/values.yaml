@@ -67,7 +67,7 @@ deployment:
         
   autoscaling:
     # -- Enable or disable autoscaling
-    enabled: true 
+    enabled: false 
     # -- Minimum number of replicas
     minReplicas: 1 
     # -- Maximum number of replicas
@@ -82,9 +82,9 @@ deployment:
     enabled: false 
   
   # -- Key is the Key in the AWS secret and ObjectName is the environment variable name to set in the pod corresponding to the key
-  awsSecrets:
-    - key: "key" 
-      objectName: "objectName" 
+  awsSecrets: {}
+    # - key: "key" 
+    #   objectName: "objectName" 
   
   # -- ConfigMap data to be set as environment variables in the pod
   configMap:
