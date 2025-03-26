@@ -21,9 +21,6 @@ Common labels
 */}}
 {{- define "pg-deploy.labels" -}}
 {{ include "pg-deploy.selectorLabels" . }}
-{{- if not .Values.businessunit }}
-{{- fail "The 'businessunit' label is required in values.yaml" }}
-{{- end }}
 {{- if not .Values.team }}
 {{- fail "The 'team' label is required in values.yaml" }}
 {{- end }}
