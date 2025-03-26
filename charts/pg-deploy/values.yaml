@@ -79,7 +79,7 @@ deployment:
 
   datadogTracing:
     # -- Enable or disable Datadog tracing
-    enabled: false 
+    enabled: true 
   
   # -- Key is the Key in the AWS secret and ObjectName is the environment variable name to set in the pod corresponding to the key
   awsSecrets: {}
@@ -101,10 +101,15 @@ deployment:
   podSecurityContext: {} 
 
   # -- Container security context. More details - https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  securityContext: {}
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 10001
+    allowPrivilegeEscalation: false
 
   # Capture Pod Failures messages in a file for debugging - https://kubernetes.io/docs/tasks/debug/debug-application/determine-reason-pod-failure/#customizing-the-termination-message
-  capturePodFailures: {}
+  capturePodFailures:
+    terminationMessagePath: "/dev/termination-log"
+    terminationMessagePolicy: "File"
 
 service:
   # -- Port at which service will be exposed
