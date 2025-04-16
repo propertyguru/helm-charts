@@ -17,6 +17,9 @@ component: ""
 namespace: "" 
 
 deployment:
+  # -- labels are the key-value pairs to be added to the deployment metadata
+  labels:
+    # key: value
   # -- replicaCount is the number of replicas for the deployment. Only required if autoscaling.enabled: false
   replicaCount: 1 
   image:

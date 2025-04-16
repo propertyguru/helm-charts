@@ -4,6 +4,9 @@ metadata:
   name: {{ include "pg-deploy.name" . }}
   labels:
     {{- include "pg-deploy.labels" . | nindent 4 }}
+    {{- if .Values.deployment.labels }}
+    {{- toYaml .Values.deployment.labels | nindent 4 }}
+    {{- end }}
   annotations:
     argocd.argoproj.io/sync-wave: "2"
 spec:
@@ -40,6 +43,9 @@ spec:
         tags.datadoghq.com/version: "{{ .Values.version | trunc 7 }}"
         version: "{{ .Values.version | trunc 7 }}"  
         {{- include "pg-deploy.labels" . | nindent 8 }}
+        {{- if .Values.deployment.labels }}
+        {{- toYaml .Values.deployment.labels | nindent 8 }}
+        {{- end }}
     spec:
       containers:
         - name: app
