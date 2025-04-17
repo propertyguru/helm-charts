@@ -36,6 +36,7 @@ spec:
           "git.repository_url": "{{ .Values.gitRepository }}", 
           "team": "{{ .Values.team }}",
           "businessunit": "{{ .Values.businessunit }}",
+          "alerts-slack-channel": "{{ .Values.alertsSlackChannel }}",
           }'
       labels:
         tags.datadoghq.com/env: {{ .Values.env }}

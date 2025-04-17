@@ -14,7 +14,9 @@ gitRepository: ""
 # -- component is the key to group applications together under a common namespace
 component: ""
 # -- namespace is the key to group applications together under a common namespace
-namespace: "" 
+namespace: ""
+# -- alertsSlackChannel is the Slack channel to send eks alerts 
+alertsSlackChannel: ""
 
 deployment:
   # -- labels are the key-value pairs to be added to the deployment metadata
@@ -115,5 +117,7 @@ deployment:
     terminationMessagePolicy: "File"
 
 service:
+  # -- type of service (e.g., ClusterIP, NodePort, LoadBalancer)
+  type: ClusterIP
   # -- Port at which service will be exposed
   port: 8080 

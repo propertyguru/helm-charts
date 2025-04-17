@@ -14,4 +14,4 @@ spec:
     targetPort: {{ .Values.deployment.applicationPort }}
   selector:
     app: {{ include "pg-deploy.name" . }}
-  type: ClusterIP
+  type: {{ .Values.service.type }}
