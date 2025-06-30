@@ -49,8 +49,6 @@ deployment:
 
   resources:
     limits:
-      # -- CPU limit for entire pod
-      cpu: 100m 
       # -- Memory limit for entire pod
       memory: 128Mi 
     requests:
