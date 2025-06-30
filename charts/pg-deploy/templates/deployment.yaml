@@ -87,7 +87,7 @@ spec:
                   fieldPath: metadata.labels['tags.datadoghq.com/version']
             {{- if .Values.deployment.awsSecrets }}
             {{- range .Values.deployment.awsSecrets }}
-            - name: {{ .objectName }}
+            - name: {{ .key }}
               valueFrom:
                 secretKeyRef:
                   name: {{ include "pg-deploy.name" $ }}
