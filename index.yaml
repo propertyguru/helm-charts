@@ -61,6 +61,16 @@ entries:
   pg-deploy:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-06-30T22:06:54.56065188Z"
+    description: A Helm chart for PropertyGuru Kubernetes deployments.
+    digest: bcdbc88c8068a1269b1cb43f461f76f336216463a39c77e5194f67bad8e1c530
+    name: pg-deploy
+    type: application
+    urls:
+    - https://github.com/propertyguru/helm-charts/releases/download/pg-deploy-1.0.4/pg-deploy-1.0.4.tgz
+    version: 1.0.4
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-06-30T21:57:06.676411359Z"
     description: A Helm chart for PropertyGuru Kubernetes deployments.
     digest: dadd02ba6e9ac24e3c84f798dd58e12231cf16bc8c21597b6d1883e94080d31a
@@ -109,4 +119,4 @@ entries:
     urls:
     - https://github.com/propertyguru/helm-charts/releases/download/pg-deploy-0.1.0/pg-deploy-0.1.0.tgz
     version: 0.1.0
-generated: "2025-06-30T21:57:06.676435224Z"
+generated: "2025-06-30T22:06:54.560685263Z"
